@@ -34,7 +34,7 @@ const ChallengeForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:4000/api/challenges", formData);
+      await axios.post("http://localhost:8000/api/challenges", formData);
       alert("Challenge created successfully!");
       setFormData(initialState);
     } catch (err) {
