@@ -1,17 +1,33 @@
-import React from 'react';
-import ChallengeForm from './components/ChallengeForm';
-import './App.css';
+import React from "react";
+import {
+  CssBaseline,
+  AppBar,
+  Toolbar,
+  Typography,
+  Container,
+} from "@mui/material";
+import ChallengeForm from "./components/ChallengeForm";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Challenge Dashboard</h1>
-      </header>
-      <main>
+    <>
+      {/* Consistent baseline & fonts */}
+      <CssBaseline />
+
+      {/* Top bar */}
+      <AppBar position="static" elevation={2}>
+        <Toolbar>
+          <Typography variant="h6" component="h1">
+            Challenge Dashboard
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      {/* Main content */}
+      <Container maxWidth="md" sx={{ mt: 6 }}>
         <ChallengeForm />
-      </main>
-    </div>
+      </Container>
+    </>
   );
 }
 
