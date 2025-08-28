@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {
-  Paper,
-  Stack,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Paper, Stack, TextField, FormControlLabel, Checkbox, Button, Typography } from "@mui/material";
+import { Trophy, Plus, Loader2, Calendar, Clock, Image as ImageIcon, Lightbulb, FileText, Building } from "lucide-react";
 
 const initialState = {
   campusId: "",
@@ -34,7 +27,14 @@ const ChallengeForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8000/api/challenges", formData);
+      // Convert local datetime inputs to UTC ISO for consistent backend storage
+      const payload = {
+        ...formData,
+        scheduledAt: formData.scheduledAt ? new Date(formData.scheduledAt).toISOString() : null,
+        expiresAt: formData.expiresAt ? new Date(formData.expiresAt).toISOString() : null,
+      };
+
+      await axios.post("https://exemplary-charm-production.up.railway.app/api/v1/challenges", payload);
       alert("Challenge created successfully!");
       setFormData(initialState);
     } catch (err) {
@@ -44,9 +44,9 @@ const ChallengeForm = () => {
   };
 
   return (
-    <Paper elevation={4} sx={{ p: 4 }}>
-      <Typography variant="h5" gutterBottom>
-        Create New Challenge
+    <Paper elevation={0} sx={{ p: 3, borderRadius: 2, boxShadow: "var(--mui-shadows-2)" }}>
+      <Typography variant="h6" fontWeight={600} gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Trophy size={16} /> Create New Challenge
       </Typography>
 
       <Stack
@@ -56,21 +56,21 @@ const ChallengeForm = () => {
         sx={{ mt: 2 }}
       >
         <TextField
-          label="Campus ID"
+          label={<span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Building size={14} /> Campus ID</span>}
           name="campusId"
           value={formData.campusId}
           onChange={handleChange}
           required
         />
         <TextField
-          label="Title"
+          label={<span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><FileText size={14} /> Title</span>}
           name="title"
           value={formData.title}
           onChange={handleChange}
           required
         />
         <TextField
-          label="Description"
+          label={<span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><FileText size={14} /> Description</span>}
           name="description"
           value={formData.description}
           onChange={handleChange}
@@ -79,20 +79,20 @@ const ChallengeForm = () => {
           required
         />
         <TextField
-          label="Hint (optional)"
+          label={<span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Lightbulb size={14} /> Hint (optional)</span>}
           name="hint"
           value={formData.hint}
           onChange={handleChange}
         />
         <TextField
-          label="Media URL (optional)"
+          label={<span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><ImageIcon size={14} /> Media URL (optional)</span>}
           name="mediaUrl"
           value={formData.mediaUrl}
           onChange={handleChange}
         />
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
           <TextField
-            label="Scheduled At"
+            label={<span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Calendar size={14} /> Scheduled At</span>}
             name="scheduledAt"
             type="datetime-local"
             value={formData.scheduledAt}
@@ -102,7 +102,7 @@ const ChallengeForm = () => {
             required
           />
           <TextField
-            label="Expires At"
+            label={<span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Clock size={14} /> Expires At</span>}
             name="expiresAt"
             type="datetime-local"
             value={formData.expiresAt}
@@ -120,11 +120,9 @@ const ChallengeForm = () => {
               onChange={handleChange}
             />
           }
-          label="Bonus Challenge"
+          label={<span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Trophy size={14} /> Bonus Challenge</span>}
         />
-        <Button variant="contained" type="submit" size="large">
-          Create Challenge
-        </Button>
+        <Button variant="contained" type="submit" size="large" startIcon={<Plus size={16} />}>Create Challenge</Button>
       </Stack>
     </Paper>
   );
